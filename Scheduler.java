@@ -1,22 +1,22 @@
 class SimpleThread extends Thread{
    private int value;
    public SimpleThread(int num){
-	   this.value = num;
-	   start();
-	   //run();
+      this.value = num;
+      start();
+      //run();
    }
    public void run(){
-	   while(true){
-		  synchronized(this){
-   	          try{
-			      wait();
-		      }
-		      catch(InterruptedException e){
-			      throw new RuntimeException(e);
-		      }
-   	          System.out.print(value+  "");
-		   }
-	   }
+       while(true){
+          synchronized(this){
+              try{
+                  wait();
+              }
+              catch(InterruptedException e){
+                  throw new RuntimeException(e);
+              }
+              System.out.print(value+  "");
+           }
+       }
    }
 }
 public class Scheduler {
@@ -24,25 +24,22 @@ public class Scheduler {
    static final int SLEEP = 37;
    
    public static void main(String args[]){
-	   SimpleThread threads[] = new SimpleThread[COUNT];
-	   
-	   for(int i=0; i<COUNT;++i)
-	      threads[i] = new SimpleThread(i+1);	      
-	   
-	   int index = 0;
-	   while(true){
-		   synchronized(threads[index]){
-              threads[index].notify();			   
-		   }
-		   
-		   try{
-			   Thread.sleep(SLEEP);
-		   }catch(InterruptedException e){
-              throw new RuntimeException(e);
-		   }
-		   
-		   index = (++index)%COUNT;
-	   }
+       SimpleThread threads[] = new SimpleThread[COUNT];
+       
+       for(int i=0; i<COUNT;++i)
+          threads[i] = new SimpleThread(i+1);
+       
+       int index = 0;
+       while(true){
+           synchronized(threads[index]){
+                    threads[index].notify();
+           }
+           try{
+               Thread.sleep(SLEEP);
+           }catch(InterruptedException e){
+               throw new RuntimeException(e);
+           }
+           index = (++index)%COUNT;
+       }
    }
-	
 }
